@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_riverpod/screens/screen_home.dart';
 
 void main() {
   runApp(
-    const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
+    ),
   );
 }
 
@@ -15,8 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          color: Colors.red,
-        ),
+            color: Colors.red,
+            centerTitle: true,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+            )),
       ),
       title: 'Flutter Demo',
       home: ScreenHome(),

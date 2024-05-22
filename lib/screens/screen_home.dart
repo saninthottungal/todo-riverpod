@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ScreenHome extends StatelessWidget {
+final todoProvider = StateProvider<List<String>>((ref) => []);
+
+class ScreenHome extends ConsumerWidget {
   ScreenHome({super.key});
 
   final todoController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(todoProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("TODO"),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -22,12 +28,26 @@ class ScreenHome extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    todoController.clear();
+                  },
                   child: const Text("Cancel"),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      final a = [1, 2, 3];
+                      final b = a;
+                      b.add(4);
+                      print(a == b);
+
+                      print(a);
+                      if (todoController.text.isEmpty) return;
+                      ref.read(todoProvider.notifier).state = [
+                        todoController.text,
+                        ...todos
+                      ];
+                    },
                     label: const Text("Add"),
                     icon: const Icon(Icons.add),
                     style: ElevatedButton.styleFrom(
@@ -36,16 +56,21 @@ class ScreenHome extends StatelessWidget {
                     )),
               ],
             ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return const ListTile(
-                    title: Text("data"),
-                  );
-                },
-                itemCount: 10,
-              ),
-            ),
+            todos.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                    child: Text("Try adding a todo!"),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(todos[index]),
+                        );
+                      },
+                      itemCount: todos.length,
+                    ),
+                  ),
           ],
         ),
       ),
