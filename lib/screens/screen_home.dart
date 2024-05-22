@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
-final todoProvider =
-    NotifierProvider<TodoNotifier, List<TodoModel>>(TodoNotifier.new);
+import '../providers/todo_provider.dart';
 
 class ScreenHome extends ConsumerWidget {
   ScreenHome({super.key});
@@ -79,42 +77,5 @@ class ScreenHome extends ConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-//TOdo Model class
-
-class TodoModel {
-  final String uid;
-  final String task;
-  final bool isCompleted;
-
-  TodoModel({
-    required this.task,
-    this.isCompleted = false,
-  }) : uid = const Uuid().v4();
-
-  TodoModel copyWith({String? task, bool? isCompleted}) {
-    return TodoModel(
-      task: task ?? this.task,
-      isCompleted: isCompleted ?? this.isCompleted,
-    );
-  }
-}
-
-class TodoNotifier extends Notifier<List<TodoModel>> {
-  @override
-  List<TodoModel> build() {
-    return [];
-  }
-
-  void add(String task) {
-    final todo = TodoModel(task: task);
-    state = [todo, ...state];
-  }
-
-  void remove(String uid) {
-    state.removeWhere((element) => element.uid == uid);
-    state = [...state];
   }
 }
