@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
-final todoProvider = StateProvider<List<String>>((ref) => []);
+final todoProvider =
+    NotifierProvider<TodoNotifier, List<TodoModel>>(TodoNotifier.new);
 
 class ScreenHome extends ConsumerWidget {
   ScreenHome({super.key});
@@ -36,17 +38,11 @@ class ScreenHome extends ConsumerWidget {
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
                     onPressed: () {
-                      final a = [1, 2, 3];
-                      final b = a;
-                      b.add(4);
-                      print(a == b);
-
-                      print(a);
                       if (todoController.text.isEmpty) return;
-                      ref.read(todoProvider.notifier).state = [
-                        todoController.text,
-                        ...todos
-                      ];
+                      ref
+                          .read(todoProvider.notifier)
+                          .addTodo(todoController.text);
+                      todoController.clear();
                     },
                     label: const Text("Add"),
                     icon: const Icon(Icons.add),
@@ -65,7 +61,7 @@ class ScreenHome extends ConsumerWidget {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(todos[index]),
+                          title: Text(todos[index].task),
                         );
                       },
                       itemCount: todos.length,
@@ -75,5 +71,37 @@ class ScreenHome extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+//TOdo Model class
+
+class TodoModel {
+  final String uid;
+  final String task;
+  final bool isCompleted;
+
+  TodoModel({
+    required this.task,
+    this.isCompleted = false,
+  }) : uid = const Uuid().v4();
+
+  TodoModel copyWith({String? task, bool? isCompleted}) {
+    return TodoModel(
+      task: task ?? this.task,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
+}
+
+class TodoNotifier extends Notifier<List<TodoModel>> {
+  @override
+  List<TodoModel> build() {
+    return [];
+  }
+
+  void addTodo(String task) {
+    final todo = TodoModel(task: task);
+    state = [todo, ...state];
   }
 }
