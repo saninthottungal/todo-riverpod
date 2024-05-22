@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_riverpod/screens/screen_home.dart';
 
 void main() {
   runApp(
@@ -12,29 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Color.fromARGB(255, 212, 91, 91))),
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Flutter Demo Home Page'),
-      ),
-      body: const Center(
-        child: Text("data"),
-      ),
+      home: const ScreenHome(),
     );
   }
 }
