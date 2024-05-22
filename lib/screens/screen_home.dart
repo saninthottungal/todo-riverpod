@@ -37,24 +37,24 @@ class ScreenHome extends ConsumerWidget {
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
-                    onPressed: () {
-                      if (todoController.text.isEmpty) return;
-                      ref
-                          .read(todoProvider.notifier)
-                          .addTodo(todoController.text);
-                      todoController.clear();
-                    },
-                    label: const Text("Add"),
-                    icon: const Icon(Icons.add),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    )),
+                  onPressed: () {
+                    if (todoController.text.isEmpty) return;
+                    ref.read(todoProvider.notifier).add(todoController.text);
+                    todoController.clear();
+                  },
+                  label: const Text("Add"),
+                  icon: const Icon(Icons.add),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
               ],
             ),
+            const SizedBox(height: 30),
             todos.isEmpty
                 ? const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40),
+                    padding: EdgeInsets.only(top: 70),
                     child: Text("Try adding a todo!"),
                   )
                 : Expanded(
@@ -62,6 +62,14 @@ class ScreenHome extends ConsumerWidget {
                       itemBuilder: (context, index) {
                         return ListTile(
                           title: Text(todos[index].task),
+                          trailing: IconButton(
+                            onPressed: () {
+                              ref
+                                  .read(todoProvider.notifier)
+                                  .remove(todos[index].uid);
+                            },
+                            icon: const Icon(Icons.delete),
+                          ),
                         );
                       },
                       itemCount: todos.length,
@@ -100,8 +108,13 @@ class TodoNotifier extends Notifier<List<TodoModel>> {
     return [];
   }
 
-  void addTodo(String task) {
+  void add(String task) {
     final todo = TodoModel(task: task);
     state = [todo, ...state];
+  }
+
+  void remove(String uid) {
+    state.removeWhere((element) => element.uid == uid);
+    state = [...state];
   }
 }
