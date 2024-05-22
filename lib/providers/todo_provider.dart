@@ -10,13 +10,18 @@ class TodoNotifier extends Notifier<List<TodoModel>> {
     return [];
   }
 
-  void add(String task) {
-    final todo = TodoModel(task: task);
-    state = [todo, ...state];
-  }
+  //add todo
+  void add(String task) => state = [TodoModel(task: task), ...state];
 
+  //remove Todo
   void remove(String uid) {
     state.removeWhere((element) => element.uid == uid);
     state = [...state];
+  }
+
+  void toggleTodoStatus(TodoModel todo) {
+    final newTodo = todo.copyWith(isCompleted: !todo.isCompleted);
+    state.removeWhere((element) => element.uid == todo.uid);
+    state = [...state, newTodo];
   }
 }

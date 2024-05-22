@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/todo_provider.dart';
 
 class ScreenHome extends ConsumerWidget {
@@ -16,12 +15,17 @@ class ScreenHome extends ConsumerWidget {
         title: const Text("TODO"),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
             TextField(
               controller: todoController,
               maxLength: 20,
+              onSubmitted: (value) {
+                if (value.trim().isEmpty) return;
+                ref.read(todoProvider.notifier).add(value);
+                todoController.clear();
+              },
             ),
             const SizedBox(height: 20),
             Row(
@@ -36,7 +40,7 @@ class ScreenHome extends ConsumerWidget {
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
                   onPressed: () {
-                    if (todoController.text.isEmpty) return;
+                    if (todoController.text.trim().isEmpty) return;
                     ref.read(todoProvider.notifier).add(todoController.text);
                     todoController.clear();
                   },
@@ -59,6 +63,13 @@ class ScreenHome extends ConsumerWidget {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         return ListTile(
+                          leading: Checkbox(
+                              value: todos[index].isCompleted,
+                              onChanged: (value) {
+                                ref
+                                    .read(todoProvider.notifier)
+                                    .toggleTodoStatus(todos[index]);
+                              }),
                           title: Text(todos[index].task),
                           trailing: IconButton(
                             onPressed: () {
