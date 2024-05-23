@@ -1,27 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../models/todo_model.dart';
 
 final todoProvider =
-    NotifierProvider<TodoNotifier, List<TodoModel>>(TodoNotifier.new);
+    AsyncNotifierProvider<TodoNotifier, List<TodoModel>>(TodoNotifier.new);
 
-class TodoNotifier extends Notifier<List<TodoModel>> {
+class TodoNotifier extends AsyncNotifier<List<TodoModel>> {
   @override
-  List<TodoModel> build() {
-    return [];
+  Future<List<TodoModel>> build() async {
+    final box = await Hive.openBox<TodoModel>('todos');
+    final todos = box.values.toList();
+    return todos;
   }
 
   //add todo
-  void add(String task) => state = [TodoModel(task: task), ...state];
+  Future<void> add(String task) async {}
 
   //remove Todo
-  void remove(String uid) {
-    state.removeWhere((element) => element.uid == uid);
-    state = [...state];
-  }
+  void remove(String uid) {}
 
-  void toggleTodoStatus(TodoModel todo) {
-    final newTodo = todo.copyWith(isCompleted: !todo.isCompleted);
-    state.removeWhere((element) => element.uid == todo.uid);
-    state = [...state, newTodo];
-  }
+  //toggle todo status
+
+  void toggleTodoStatus(TodoModel todo) {}
 }

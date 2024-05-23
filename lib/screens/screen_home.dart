@@ -54,36 +54,42 @@ class ScreenHome extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 30),
-            todos.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.only(top: 70),
-                    child: Text("Try adding a todo!"),
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Checkbox(
-                              value: todos[index].isCompleted,
-                              onChanged: (value) {
-                                ref
-                                    .read(todoProvider.notifier)
-                                    .toggleTodoStatus(todos[index]);
-                              }),
-                          title: Text(todos[index].task),
-                          trailing: IconButton(
-                            onPressed: () {
-                              ref
-                                  .read(todoProvider.notifier)
-                                  .remove(todos[index].uid);
-                            },
-                            icon: const Icon(Icons.delete),
-                          ),
-                        );
-                      },
-                      itemCount: todos.length,
-                    ),
-                  ),
+            todos.when(
+              data: (todos) {
+                return todos.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 70),
+                        child: Text("Try adding a todo!"),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: Checkbox(
+                                  value: todos[index].isCompleted,
+                                  onChanged: (value) {
+                                    ref
+                                        .read(todoProvider.notifier)
+                                        .toggleTodoStatus(todos[index]);
+                                  }),
+                              title: Text(todos[index].task),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(todoProvider.notifier)
+                                      .remove(todos[index].uid);
+                                },
+                                icon: const Icon(Icons.delete),
+                              ),
+                            );
+                          },
+                          itemCount: todos.length,
+                        ),
+                      );
+              },
+              error: (err, stack) => Text(err.toString()),
+              loading: () => const CircularProgressIndicator(),
+            )
           ],
         ),
       ),
