@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_riverpod/models/todo_model.dart';
 import '../providers/todo_provider.dart';
 
 class ScreenHome extends ConsumerWidget {
@@ -22,9 +23,9 @@ class ScreenHome extends ConsumerWidget {
               controller: todoController,
               maxLength: 20,
               onSubmitted: (value) {
-                // if (value.trim().isEmpty) return;
-                // ref.read(todoProvider.notifier).add(value);
-                // todoController.clear();
+                if (value.trim().isEmpty) return;
+                ref.read(todoProvider.notifier).add(TodoModel(task: value));
+                todoController.clear();
               },
             ),
             const SizedBox(height: 20),
@@ -40,9 +41,11 @@ class ScreenHome extends ConsumerWidget {
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // if (todoController.text.trim().isEmpty) return;
-                    // ref.read(todoProvider.notifier).add(todoController.text);
-                    // todoController.clear();
+                    if (todoController.text.trim().isEmpty) return;
+                    ref
+                        .read(todoProvider.notifier)
+                        .add(TodoModel(task: todoController.text));
+                    todoController.clear();
                   },
                   label: const Text("Add"),
                   icon: const Icon(Icons.add),
