@@ -5,16 +5,19 @@ import 'package:todo_riverpod/models/todo_model.dart';
 final firestoreProvider =
     Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 
-final todoProvider = AsyncNotifierProvider<FirebaseNotifer, List<TodoModel>>(
+final todoProvider = StreamNotifierProvider<FirebaseNotifer, List<TodoModel>>(
     FirebaseNotifer.new);
 
-class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
+class FirebaseNotifer extends StreamNotifier<List<TodoModel>> {
   @override
-  Future<List<TodoModel>> build() async {
+  Stream<List<TodoModel>> build() {
     final instance = ref.read(firestoreProvider);
-    final collection =
-        await instance.collection('todos').get().then((value) => value.docs);
-    return collection.map((e) => TodoModel.fromMap(e.data())).toList();
+
+    return instance.collection('todos').snapshots().map((querySnapshot) =>
+        querySnapshot.docs
+            .map((documentSnapshot) =>
+                TodoModel.fromMap(documentSnapshot.data()))
+            .toList());
   }
 
   //adding
@@ -22,8 +25,6 @@ class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
   Future<void> add(TodoModel todo) async {
     final instance = ref.read(firestoreProvider);
     await instance.collection('todos').doc(todo.uid).set(todo.toMap());
-
-    ref.invalidateSelf();
   }
 
   //remove
@@ -31,8 +32,6 @@ class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
   Future<void> remove(TodoModel todo) async {
     final instance = ref.read(firestoreProvider);
     await instance.collection('todos').doc(todo.uid).delete();
-
-    ref.invalidateSelf();
   }
 
   //
@@ -42,6 +41,5 @@ class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
     instance.collection('todos').doc(todo.uid).set(
           todo.copyWith(isCompleted: !todo.isCompleted).toMap(),
         );
-    ref.invalidateSelf();
   }
 }
