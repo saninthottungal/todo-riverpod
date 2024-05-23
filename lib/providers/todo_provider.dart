@@ -31,5 +31,11 @@ class TodoNotifier extends AsyncNotifier<List<TodoModel>> {
 
   //toggle todo status
 
-  void toggleTodoStatus(TodoModel todo) {}
+  void toggleTodoStatus(TodoModel todo) async {
+    final box = await Hive.openBox<TodoModel>('todos');
+    final value =
+        box.values.indexed.firstWhere((element) => element.$2.key == todo.key);
+    box.putAt(value.$1, todo.copyWith(isCompleted: !todo.isCompleted));
+    ref.invalidateSelf();
+  }
 }
