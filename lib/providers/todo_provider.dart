@@ -14,7 +14,11 @@ class TodoNotifier extends AsyncNotifier<List<TodoModel>> {
   }
 
   //add todo
-  Future<void> add(String task) async {}
+  Future<void> add(TodoModel todo) async {
+    final box = await Hive.openBox<TodoModel>('todos');
+    box.put(todo.uid, todo);
+    ref.invalidateSelf();
+  }
 
   //remove Todo
   void remove(String uid) {}
