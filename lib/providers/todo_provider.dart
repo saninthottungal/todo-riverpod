@@ -20,7 +20,7 @@ class TodoNotifier extends AsyncNotifier<List<TodoModel>> {
     final box = await ref.read(todoBoxProvider.future);
     await box.add(todo);
 
-    ref.notifyListeners();
+    ref.invalidateSelf();
   }
 
   //remove Todo
