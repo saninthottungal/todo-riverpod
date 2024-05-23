@@ -2,6 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/todo_model.dart';
 
+enum NoteCategory {
+  all,
+  completed,
+  pending,
+}
+
+final categoryProvider = StateProvider<NoteCategory>((ref) => NoteCategory.all);
+
 final todoBoxProvider = FutureProvider<Box<TodoModel>>(
     (ref) async => await Hive.openBox<TodoModel>('todos'));
 
@@ -11,8 +19,15 @@ final todoProvider =
 class TodoNotifier extends AsyncNotifier<List<TodoModel>> {
   @override
   Future<List<TodoModel>> build() async {
+    final category = ref.watch(categoryProvider);
     final box = await ref.read(todoBoxProvider.future);
-    return box.values.toList();
+    final todos = box.values;
+
+    return category == NoteCategory.all
+        ? todos.toList()
+        : category == NoteCategory.completed
+            ? todos.where((element) => element.isCompleted).toList()
+            : todos.where((element) => !element.isCompleted).toList();
   }
 
   //add todo

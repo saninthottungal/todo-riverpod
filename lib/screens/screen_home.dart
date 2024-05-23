@@ -11,6 +11,7 @@ class ScreenHome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todoProvider);
+    final category = ref.watch(categoryProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("TODO"),
@@ -57,6 +58,50 @@ class ScreenHome extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 30),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    ref.read(categoryProvider.notifier).state =
+                        NoteCategory.all;
+                  },
+                  child: Text(
+                    "all",
+                    style: TextStyle(
+                      color: category != NoteCategory.all ? Colors.black : null,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ref.read(categoryProvider.notifier).state =
+                        NoteCategory.completed;
+                  },
+                  child: Text(
+                    "completed",
+                    style: TextStyle(
+                      color: category != NoteCategory.completed
+                          ? Colors.black
+                          : null,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ref.read(categoryProvider.notifier).state =
+                        NoteCategory.pending;
+                  },
+                  child: Text(
+                    "pending",
+                    style: TextStyle(
+                      color: category != NoteCategory.pending
+                          ? Colors.black
+                          : null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             todos.when(
               data: (todos) {
                 return todos.isEmpty
