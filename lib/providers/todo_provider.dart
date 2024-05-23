@@ -1,27 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/todo_model.dart';
+import 'package:todo_riverpod/models/todo_model.dart';
 
-final todoProvider =
-    NotifierProvider<TodoNotifier, List<TodoModel>>(TodoNotifier.new);
+final firestoreProvider =
+    Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 
-class TodoNotifier extends Notifier<List<TodoModel>> {
+final todoProvider = AsyncNotifierProvider<FirebaseNotifer, List<TodoModel>>(
+    FirebaseNotifer.new);
+
+class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
   @override
-  List<TodoModel> build() {
-    return [];
-  }
-
-  //add todo
-  void add(String task) => state = [TodoModel(task: task), ...state];
-
-  //remove Todo
-  void remove(String uid) {
-    state.removeWhere((element) => element.uid == uid);
-    state = [...state];
-  }
-
-  void toggleTodoStatus(TodoModel todo) {
-    final newTodo = todo.copyWith(isCompleted: !todo.isCompleted);
-    state.removeWhere((element) => element.uid == todo.uid);
-    state = [...state, newTodo];
+  Future<List<TodoModel>> build() async {
+    final instance = ref.read(firestoreProvider);
+    final collection =
+        await instance.collection('todos').get().then((value) => value.docs);
+    return collection.map((e) => TodoModel.fromMap(e.data())).toList();
   }
 }

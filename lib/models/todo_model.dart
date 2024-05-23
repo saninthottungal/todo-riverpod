@@ -23,8 +23,8 @@ class TodoModel {
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
     return TodoModel(
-      task: map['task'],
-      isCompleted: map['isCompleted'],
+      task: map['task'] ?? '',
+      isCompleted: map['isCompleted'] ?? false,
     );
   }
 

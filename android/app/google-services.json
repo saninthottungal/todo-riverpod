@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "77403590512",
-    "project_id": "todo-riverpod-project",
-    "storage_bucket": "todo-riverpod-project.appspot.com"
+    "project_number": "863319344856",
+    "project_id": "my-cool-riverpod-test",
+    "storage_bucket": "my-cool-riverpod-test.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:77403590512:android:94550e6dbf6523110609b5",
+        "mobilesdk_app_id": "1:863319344856:android:6d5d561246e843c33c39ad",
         "android_client_info": {
           "package_name": "com.example.todo_riverpod"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAKSgHwxBIat-BxUERuvvO7tiT6_BdLtSM"
+          "current_key": "AIzaSyCmYUKEFMacXTyFlFygIY_1K-ZJ9GLiPZc"
         }
       ],
       "services": {

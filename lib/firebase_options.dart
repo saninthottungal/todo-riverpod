@@ -53,10 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAKSgHwxBIat-BxUERuvvO7tiT6_BdLtSM',
-    appId: '1:77403590512:android:94550e6dbf6523110609b5',
-    messagingSenderId: '77403590512',
-    projectId: 'todo-riverpod-project',
-    storageBucket: 'todo-riverpod-project.appspot.com',
+    apiKey: 'AIzaSyCmYUKEFMacXTyFlFygIY_1K-ZJ9GLiPZc',
+    appId: '1:863319344856:android:6d5d561246e843c33c39ad',
+    messagingSenderId: '863319344856',
+    projectId: 'my-cool-riverpod-test',
+    storageBucket: 'my-cool-riverpod-test.appspot.com',
   );
+
 }

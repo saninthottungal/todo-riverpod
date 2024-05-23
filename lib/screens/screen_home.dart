@@ -22,9 +22,9 @@ class ScreenHome extends ConsumerWidget {
               controller: todoController,
               maxLength: 20,
               onSubmitted: (value) {
-                if (value.trim().isEmpty) return;
-                ref.read(todoProvider.notifier).add(value);
-                todoController.clear();
+                // if (value.trim().isEmpty) return;
+                // ref.read(todoProvider.notifier).add(value);
+                // todoController.clear();
               },
             ),
             const SizedBox(height: 20),
@@ -40,9 +40,9 @@ class ScreenHome extends ConsumerWidget {
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
                   onPressed: () {
-                    if (todoController.text.trim().isEmpty) return;
-                    ref.read(todoProvider.notifier).add(todoController.text);
-                    todoController.clear();
+                    // if (todoController.text.trim().isEmpty) return;
+                    // ref.read(todoProvider.notifier).add(todoController.text);
+                    // todoController.clear();
                   },
                   label: const Text("Add"),
                   icon: const Icon(Icons.add),
@@ -54,36 +54,42 @@ class ScreenHome extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 30),
-            todos.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.only(top: 70),
-                    child: Text("Try adding a todo!"),
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Checkbox(
-                              value: todos[index].isCompleted,
-                              onChanged: (value) {
-                                ref
-                                    .read(todoProvider.notifier)
-                                    .toggleTodoStatus(todos[index]);
-                              }),
-                          title: Text(todos[index].task),
-                          trailing: IconButton(
-                            onPressed: () {
-                              ref
-                                  .read(todoProvider.notifier)
-                                  .remove(todos[index].uid);
-                            },
-                            icon: const Icon(Icons.delete),
-                          ),
-                        );
-                      },
-                      itemCount: todos.length,
-                    ),
-                  ),
+            todos.when(
+              data: (todos) {
+                return todos.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 70),
+                        child: Text("Try adding a todo!"),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: Checkbox(
+                                  value: todos[index].isCompleted,
+                                  onChanged: (value) {
+                                    // ref
+                                    //     .read(todoProvider.notifier)
+                                    //     .toggleTodoStatus(todos[index]);
+                                  }),
+                              title: Text(todos[index].task),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  // ref
+                                  //     .read(todoProvider.notifier)
+                                  //     .remove(todos[index].uid);
+                                },
+                                icon: const Icon(Icons.delete),
+                              ),
+                            );
+                          },
+                          itemCount: todos.length,
+                        ),
+                      );
+              },
+              error: (error, stackTrace) => Text(error.toString()),
+              loading: () => const CircularProgressIndicator(),
+            ),
           ],
         ),
       ),
