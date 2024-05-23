@@ -68,6 +68,9 @@ class ScreenHome extends ConsumerWidget {
                         child: ListView.builder(
                           itemBuilder: (context, index) {
                             return ListTile(
+                              onTap: () {
+                                print(todos[index].uid);
+                              },
                               leading: Checkbox(
                                   value: todos[index].isCompleted,
                                   onChanged: (value) {
@@ -80,7 +83,7 @@ class ScreenHome extends ConsumerWidget {
                                 onPressed: () {
                                   ref
                                       .read(todoProvider.notifier)
-                                      .remove(todos[index].uid);
+                                      .remove(todos[index]);
                                 },
                                 icon: const Icon(Icons.delete),
                               ),
@@ -99,3 +102,7 @@ class ScreenHome extends ConsumerWidget {
     );
   }
 }
+
+//96dc7724-b22f-439f-ac7d-a8917d2e43cd add
+//787f0a38-ed54-4da3-8977-4c7441012b5b remove
+//ca10fedd-1fd9-47c3-a99a-8c08a1d81f22
