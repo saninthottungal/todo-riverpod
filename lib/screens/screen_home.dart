@@ -71,9 +71,9 @@ class ScreenHome extends ConsumerWidget {
                               leading: Checkbox(
                                   value: todos[index].isCompleted,
                                   onChanged: (value) {
-                                    // ref
-                                    //     .read(todoProvider.notifier)
-                                    //     .toggleTodoStatus(todos[index]);
+                                    ref
+                                        .read(todoProvider.notifier)
+                                        .toggleTodoStatus(todos[index]);
                                   }),
                               title: Text(todos[index].task),
                               trailing: IconButton(
