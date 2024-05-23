@@ -78,9 +78,9 @@ class ScreenHome extends ConsumerWidget {
                               title: Text(todos[index].task),
                               trailing: IconButton(
                                 onPressed: () {
-                                  // ref
-                                  //     .read(todoProvider.notifier)
-                                  //     .remove(todos[index].uid);
+                                  ref
+                                      .read(todoProvider.notifier)
+                                      .remove(todos[index]);
                                 },
                                 icon: const Icon(Icons.delete),
                               ),

@@ -10,10 +10,19 @@ class TodoModel {
     this.isCompleted = false,
   }) : uid = const Uuid().v4();
 
+  //named constructor
+
+  TodoModel.withId({
+    required this.uid,
+    required this.task,
+    this.isCompleted = false,
+  });
+
   //copyWith
 
   TodoModel copyWith({String? task, bool? isCompleted}) {
-    return TodoModel(
+    return TodoModel.withId(
+      uid: uid,
       task: task ?? this.task,
       isCompleted: isCompleted ?? this.isCompleted,
     );
@@ -22,7 +31,8 @@ class TodoModel {
   //fromMap
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
-    return TodoModel(
+    return TodoModel.withId(
+      uid: map['uid'] ?? '',
       task: map['task'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
     );
@@ -31,6 +41,7 @@ class TodoModel {
   //toMap
   Map<String, dynamic> toMap() {
     return {
+      'uid': uid,
       'task': task,
       'isCompleted': isCompleted,
     };

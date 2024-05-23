@@ -22,5 +22,16 @@ class FirebaseNotifer extends AsyncNotifier<List<TodoModel>> {
   Future<void> add(TodoModel todo) async {
     final instance = ref.read(firestoreProvider);
     await instance.collection('todos').doc(todo.uid).set(todo.toMap());
+    print(todo.uid);
+    ref.invalidateSelf();
+  }
+
+  //remove
+
+  Future<void> remove(TodoModel todo) async {
+    final instance = ref.read(firestoreProvider);
+    await instance.collection('todos').doc(todo.uid).delete();
+    print(todo.uid);
+    ref.invalidateSelf();
   }
 }
